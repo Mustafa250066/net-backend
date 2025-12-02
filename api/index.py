@@ -494,5 +494,5 @@ async def shutdown_db_client():
 # All your routes above....
 
 # --- LAST LINES ---
-from mangum import Mangum
-handler = Mangum(app)
+# from mangum import Mangum
+# handler = Mangum(app)
