@@ -84,7 +84,7 @@ class Episode(BaseModel):
     title: str
     description: Optional[str] = None
     video_url: str
-    duration: Optional[int] = None  # in seconds
+    duration: Optional[float] = None  # in seconds
     thumbnail_url: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -95,7 +95,7 @@ class EpisodeCreate(BaseModel):
     title: str
     description: Optional[str] = None
     video_url: str
-    duration: Optional[int] = None
+    duration: Optional[float] = None
     thumbnail_url: Optional[str] = None
 
 class Movie(BaseModel):
@@ -105,7 +105,7 @@ class Movie(BaseModel):
     title: str
     description: Optional[str] = None
     video_url: str
-    duration: Optional[int] = None  # in seconds
+    duration: Optional[float] = None  # in seconds
     thumbnail_url: Optional[str] = None
     poster_url: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -116,7 +116,7 @@ class MovieCreate(BaseModel):
     title: str                     # still required
     description: Optional[str] = None
     video_url: str
-    duration: Optional[int] = None
+    duration: Optional[float] = None
     thumbnail_url: Optional[str] = None
     poster_url: Optional[str] = None
 
