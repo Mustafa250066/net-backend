@@ -233,7 +233,7 @@ async def create_show(show: ShowCreate, current_admin: str = Depends(get_current
 
 @api_router.get("/shows", response_model=List[Show])
 async def get_shows():
-    shows = await db.shows.find({}, {"_id": 0}).to_list(1000)
+    shows = await db.shows.find({}, {"_id": 0}).to_list(100000)
     for show in shows:
         if isinstance(show['created_at'], str):
             show['created_at'] = datetime.fromisoformat(show['created_at'])
@@ -284,7 +284,7 @@ async def create_season(season: SeasonCreate, current_admin: str = Depends(get_c
 @api_router.get("/seasons", response_model=List[Season])
 async def get_seasons(show_id: Optional[str] = None):
     query = {"show_id": show_id} if show_id else {}
-    seasons = await db.seasons.find(query, {"_id": 0}).to_list(1000)
+    seasons = await db.seasons.find(query, {"_id": 0}).to_list(100000)
     for season in seasons:
         if isinstance(season['created_at'], str):
             season['created_at'] = datetime.fromisoformat(season['created_at'])
@@ -328,7 +328,7 @@ async def get_episodes(season_id: Optional[str] = None, show_id: Optional[str] =
         query["season_id"] = season_id
     if show_id:
         query["show_id"] = show_id
-    episodes = await db.episodes.find(query, {"_id": 0}).to_list(1000)
+    episodes = await db.episodes.find(query, {"_id": 0}).to_list(100000)
     for episode in episodes:
         if isinstance(episode['created_at'], str):
             episode['created_at'] = datetime.fromisoformat(episode['created_at'])
@@ -386,7 +386,7 @@ async def create_movie(movie: MovieCreate, current_admin: str = Depends(get_curr
 @api_router.get("/movies", response_model=List[Movie])
 async def get_movies(show_id: Optional[str] = None):
     query = {"show_id": show_id} if show_id else {}
-    raw_movies = await db.movies.find(query, {"_id": 0}).to_list(1000)
+    raw_movies = await db.movies.find(query, {"_id": 0}).to_list(100000)
 
     movies = []
     for movie in raw_movies:
