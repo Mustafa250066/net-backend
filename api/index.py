@@ -223,6 +223,16 @@ async def verify_token(current_admin: str = Depends(get_current_admin)):
 
 # ============ Show Routes ============
 
+def slugify(text: str) -> str:
+    import re
+    if not text:
+        return ""
+    text = text.lower().strip()
+    text = re.sub(r'\s+', '-', text)
+    text = re.sub(r'[^\w\-]+', '', text)
+    text = re.sub(r'\-+', '-', text)
+    return text
+
 @api_router.post("/shows", response_model=Show)
 async def create_show(show: ShowCreate, current_admin: str = Depends(get_current_admin)):
     show_obj = Show(**show.model_dump())
@@ -242,6 +252,12 @@ async def get_shows():
 @api_router.get("/shows/{show_id}", response_model=Show)
 async def get_show(show_id: str):
     show = await db.shows.find_one({"id": show_id}, {"_id": 0})
+    if not show:
+        shows = await db.shows.find({}, {"_id": 0}).to_list(100000)
+        for s in shows:
+            if slugify(s.get('name', '')) == show_id:
+                show = s
+                break
     if not show:
         raise HTTPException(status_code=404, detail="Show not found")
     if isinstance(show['created_at'], str):
@@ -409,6 +425,12 @@ async def get_movies(show_id: Optional[str] = None):
 @api_router.get("/movies/{movie_id}", response_model=Movie)
 async def get_movie(movie_id: str):
     movie = await db.movies.find_one({"id": movie_id}, {"_id": 0})
+    if not movie:
+        movies = await db.movies.find({}, {"_id": 0}).to_list(100000)
+        for m in movies:
+            if slugify(m.get('title', '')) == movie_id:
+                movie = m
+                break
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
     if isinstance(movie['created_at'], str):
